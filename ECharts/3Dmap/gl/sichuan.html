@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+	<script src="./echarts3.8.5.js"></script>
+	<!--<script src="./echarts.min.js"></script>-->
+	<script src="./echarts-gl2.js"></script>
+    <script src="./sichuan.js"></script>
+    
+</head>
+
+<body>
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script>
+	var myChart = echarts.init(document.getElementById('main'));
+
+	option = {
+  
+    series: [{
+        type: 'map',
+        map: 'sichuan'
+    }]
+};
+    myChart.setOption(option); 
+    </script>
+</body>
+
+</html>

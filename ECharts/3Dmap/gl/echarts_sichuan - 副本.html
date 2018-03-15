@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+
+</head>
+
+<body>
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+    <script src="./echarts3.8.5.js"></script>
+	<script src="./echarts-gl2.js"></script>
+    <!--<script src="sichuan.js"></script>  -->
+    <script src="sichuan.js"></script>
+
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        var data = [
+            { name: "成都", value: 260 },
+            { name: "巴中", value: 23 },
+            { name: "崇州", value: 29 },
+            { name: "达川", value: 27 },
+            { name: "德阳", value: 143 },
+            { name: "都江堰", value: 114 },
+            { name: "峨眉山", value: 10 },
+            { name: "涪陵", value: 70 },
+            { name: "广汉", value: 194 },
+            { name: "广元", value: 90 },
+            { name: "华蓥", value: 225 },
+            { name: "简阳", value: 140 },
+            { name: "江油", value: 110 },
+            { name: "阆中", value: 90 },
+            { name: "乐山", value: 2 },
+            { name: "泸州", value: 17 },
+            { name: "绵阳", value: 30 },
+            { name: "南充", value: 300 },
+            { name: "内江", value: 170 },
+            { name: "攀枝花", value: 40 },
+            { name: "邛崃", value: 67 },
+            { name: "遂宁", value: 150 },
+            { name: "万县", value: 180 },
+            { name: "万源", value: 200 },
+            { name: "西昌", value: 20 },
+            { name: "宜宾", value: 15 },
+            { name: "自贡", value: 40 },
+            { name: "资阳", value: 22 },
+            { name: "彭州", value: 10 }
+        ];
+        var geoCoordMap = {
+            "成都": [104.04, 30.40],
+            "巴中": [106.43, 31.51],
+            "崇州": [103.40, 30.39],
+            "达川": [107.29, 31.14],
+            "德阳": [104.22, 31.09],
+            "都江堰": [103.29, 29.36],
+            "峨眉山": [103.29, 29.36],
+            "涪陵": [107.22, 29.42],
+            "广汉": [104.15, 30.58],
+            "广元": [105.51, 32.28],
+            "华蓥": [106.44, 30.26],
+            "简阳": [104.32, 30.24],
+            "江油": [104.42, 31.48],
+            "阆中": [105.58, 31.36],
+            "乐山": [103.44, 29.36],
+            "泸州": [105.24, 28.54],
+            "绵阳": [104.42, 31.30],
+            "南充": [106.04, 30.49],
+            "内江": [105.02, 29.36],
+            "攀枝花": [101.43, 26.34],
+            "邛崃": [103.28, 30.26],
+            "遂宁": [105.33, 30.31],
+            "万县": [108.21, 30.50],
+            "万源": [108.03, 32.03],
+            "西昌": [102.16, 27.54],
+            "宜宾": [104.34, 28.47],
+            "自贡": [104.46, 29.23],
+            "资阳": [104.38, 30.09],
+            "彭州": [103.57, 30.59]
+        };
+
+        var convertData = function (data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value)
+                    });
+                }
+            }
+            return res;
+        };
+
+
+var max = 480, min = 9; // todo 
+    var maxSize4Pin = 100, minSize4Pin = 20;
+
+option = {
+        tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+              if(typeof(params.value)[2] == "undefined"){
+              	return params.name ;
+              }else{
+              	return params.name;
+              }
+            }
+        },
+        legend: {
+            orient: 'vertical',
+            y: 'bottom',
+            x: 'right',
+            data: ['credit_pm2.5'],
+            textStyle: {
+                color: '#fff'
+            }
+        },
+        visualMap: {
+            show: false,
+            min: 0,
+            max: 500,
+            left: 'left',
+            top: 'bottom',
+            text: ['高', '低'], // 文本，默认为数值文本
+            calculable: true,
+            seriesIndex: [1],
+            inRange: {
+       
+
+            }
+        },
+        // toolbox: {
+        //     show: true,
+        //     orient: 'vertical',
+        //     left: 'right',
+        //     top: 'center',
+        //     feature: {
+        //             dataView: {readOnly: false},
+        //             restore: {},
+        //             saveAsImage: {}
+        //             }
+        // },
+        geo: {
+            show: true,
+            map: '四川',
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: false,
+                }
+            },
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#031525',
+                    borderColor: '#3B5077',
+                },
+                emphasis: {
+                    areaColor: '#2B91B7',
+                }
+            }
+        },
+        series : [
+    //   {
+    //         name: 'credit_pm2.5',
+    //         type: 'scatter',
+    //         coordinateSystem: 'geo',
+    //         data: convertData(data),
+    //         symbolSize: function (val) {
+    //             return val[2] / 10;
+    //         },
+    //         label: {
+    //             normal: {
+    //                 formatter: '{b}',
+    //                 position: 'right',
+    //                 show: true
+    //             },
+    //             emphasis: {
+    //                 show: true
+    //             }
+    //         },
+    //         itemStyle: {
+    //             normal: {
+    //                 color: '#05C3F9'
+    //             }
+    //         }
+    //     },
+         {
+            type: 'map3D',
+            map: '四川',
+            geoIndex: 0,
+            aspectScale: 0.75, //长宽比
+            showLegendSymbol: false, // 存在legend时显示
+            label: {
+                normal: {
+                    show: false
+                },
+                emphasis: {
+                    show: false,
+                    textStyle: {
+                        color: '#fff'
+                    }
+                }
+            },
+            roam: true,
+            itemStyle: {
+                normal: {
+                    areaColor: '#031525',
+                    borderColor: '#3B5077',
+                },
+                emphasis: {
+                    areaColor: '#2B91B7'
+                }
+            },
+            animation: false,
+            data: data
+        },
+        // {
+        //     name: '点',
+        //     type: 'scatter',
+        //     coordinateSystem: 'geo',
+        //     symbol: 'pin',
+        //     symbolSize: function (val) {
+        //         var a = (maxSize4Pin - minSize4Pin) / (max - min);
+        //         var b = minSize4Pin - a*min;
+        //         b = maxSize4Pin - a*max;
+        //         return a*val[2]+b;
+        //     },
+        //     label: {
+        //         normal: {
+        //             show: true,
+        //             textStyle: {
+        //                 color: '#fff',
+        //                 fontSize: 9,
+        //             }
+        //         }
+        //     },
+        //     itemStyle: {
+        //         normal: {
+        //             color: '#F62157', //标志颜色
+        //         }
+        //     },
+        //     zlevel: 6,
+        //     data: convertData(data),
+        // },
+        {
+            name: 'Top 5',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: convertData(data.sort(function (a, b) {
+                return b.value - a.value;
+            }).slice(0, 5)),
+            symbolSize: function (val) {
+                return val[2] / 10;
+            },
+            showEffectOn: 'render',
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+                normal: {
+                    formatter: '{b}',
+                    position: 'right',
+                    show: true
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#30ffff',
+                    shadowBlur: 10,
+                    shadowColor: '#05C3F9'
+                }
+            },
+            zlevel: 1
+        },
+         
+    ]
+    };
+
+        myChart.setOption(option);
+    </script>
+
+
+</body>
+
+</html>
